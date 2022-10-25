@@ -1,16 +1,71 @@
-# uchebaf
+# ПРАКТИЧЕСКАЯ РАБОТА №1
+## Тема: Создание экранов при помощи Flutter
 
-A new Flutter project.
+Цель работы: Реализация дизайнерских элементов пяти макетов в графический интерфейс мобильного приложения на базе фреймворка Flutter. 
 
-## Getting Started
+Ход работы:
 
-This project is a starting point for a Flutter application.
+•	Хранение ассетов
 
-A few resources to get you started if this is your first Flutter project:
+Ассеты подключатся в pubspec.yaml, путем указания пути к соответствующей папки.
+ 
+![image](https://user-images.githubusercontent.com/78308933/197720986-3342c1bf-cb9e-4645-b4af-c2c23debedfc.png)
+ 
+Рисунок 1 - Хранение изображений
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+•	Реализация первого макета
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Для реализации первого макета был задействован программный код изображенный на рисунке 2.
+ 
+![image](https://user-images.githubusercontent.com/78308933/197721037-ac7f8838-58dd-46b0-9eb1-562b5ee9f32e.png)
+
+Рисунок 2 – Реализация макета с помощью программного кода.
+ 
+![image](https://user-images.githubusercontent.com/78308933/197721075-ba31933f-336f-4255-bd8e-3a295c97dd2a.png)
+
+Рисунок 3 – Результат реализации макета.
+ 
+•	Реализация второго макета
+
+![image](https://user-images.githubusercontent.com/78308933/197721134-775a2d43-3080-45b6-afcf-8a57476510ca.png)
+
+Рисунок 4 – Реализация второго макета с помощью программного кода.
+ 
+![image](https://user-images.githubusercontent.com/78308933/197721176-d8c7d530-075a-4659-bcdf-0a673436711f.png)
+ 
+Рисунок 5 – Результат реализации второго макета.
+
+
+
+•	Реализация третьего макета
+
+![image](https://user-images.githubusercontent.com/78308933/197721247-561fe146-6179-49c7-bbd0-60a635176784.png)
+
+Рисунок 6 – Реализация третьего макета с помощью программного кода.
+
+![image](https://user-images.githubusercontent.com/78308933/197722256-f613c5bc-9b87-4ce0-a431-94e194e4a7e7.png)
+
+Рисунок 7 – Результат реализации третьего макета.
+
+•	Реализация четвертого макета
+ 
+![image](https://user-images.githubusercontent.com/78308933/197722354-f9ccdf45-e044-4c65-a4ef-5b4c31323344.png)
+ 
+Рисунок 8 – Реализация четвертого макета с помощью программного кода.
+
+![image](https://user-images.githubusercontent.com/78308933/197722437-a6123c67-95ca-4143-b336-1d327a1d2977.png)
+
+Рисунок 9 – Результат реализации четвертого макета.
+
+•	Реализация пятого макета
+
+![image](https://user-images.githubusercontent.com/78308933/197722565-993ebfeb-9986-4cf6-b698-e74a6d19b0d0.png)
+
+ 
+Рисунок 10 – Реализация пятого макета с помощью программного кода.
+ 
+![image](https://user-images.githubusercontent.com/78308933/197722598-791c73e7-29b3-4d09-bbf9-7518ebb68c06.png)
+
+Рисунок 11 – Результат реализации пятого макета.
+
+Вывод: Реализовал 5 экранов с помощью фреймворка Flutter.
