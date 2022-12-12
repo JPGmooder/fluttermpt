@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -11,9 +13,13 @@ class ThemeCubit extends Cubit<ThemeCubitState> {
     emit(ThemeModeChangedState(currentTheme: themeMode));
   }
 
-  void calculateTheme(ThemeMode themeMode) {
+  void calculateTheme(ThemeMode themeMode, bool isDescreasing) {
+    var currentValue = themeMode == ThemeMode.light ? 1 : 2;
+    if (isDescreasing) {
+      currentValue = currentValue * -1;
+    }
     emit(ThemeValueAddedState(
         currentTheme: themeMode,
-        currentValue: themeMode == ThemeMode.light ? 1 : 2));
+        currentValue: currentValue));
   }
 }

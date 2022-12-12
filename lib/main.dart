@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cubitapp/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -55,8 +58,44 @@ class BodyWidget extends StatefulWidget {
 
 class _BodyWidgetState extends State<BodyWidget> {
   List<String> values = [];
-
+  late Timer _timer;
+  SharedPreferences? currentPrefs;
   int currentValue = 0;
+
+  @override
+  void initState() {
+    SharedPreferences.getInstance().then((value) {
+      currentPrefs = value;
+      if (currentPrefs!.containsKey("count")) {
+        setState(() {
+          currentPrefs = value;
+          values = value.getStringList("count")!;
+          currentValue = value.getInt("value")!;
+        });
+      }
+      if (currentPrefs!.containsKey('theme')) {
+        context
+            .read<ThemeCubit>()
+            .changeTheme(ThemeMode.values[value.getInt('theme')!]);
+      }
+    });
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      context.read<ThemeCubit>().calculateTheme(
+          Theme.of(context).brightness == Brightness.light
+              ? ThemeMode.light
+              : ThemeMode.dark,
+          false);
+    });
+    super.initState();
+  }
+
+  Timer getTimer() => Timer.periodic(Duration(seconds: 5), (timer) {
+        context.read<ThemeCubit>().calculateTheme(
+            Theme.of(context).brightness == Brightness.light
+                ? ThemeMode.light
+                : ThemeMode.dark,
+            false);
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -68,41 +107,105 @@ class _BodyWidgetState extends State<BodyWidget> {
             values.add(
                 "Значение: $currentValue, Тема: ${state.currentTheme.name}");
           });
+
+          currentPrefs?.setStringList("count", values);
+          currentPrefs?.setInt("value", currentValue);
         } else if (state is ThemeModeChangedState) {
           widget.changeMode(state.currentTheme);
+          currentPrefs?.setInt("theme", state.currentTheme.index);
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Expanded(
-              child: ListView(
-                children: values.map((e) => Center(child: Text(e))).toList(),
+      child: Stack(
+        children: [
+          Expanded(
+            child: ListView(
+              clipBehavior: Clip.none,
+              children: values.map((e) => Center(child: Text(e))).toList(),
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: ColoredBox(
+              color: Colors.black54,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        FloatingActionButton(
+                            onPressed: () {
+                              _timer.cancel();
+                              _timer = getTimer();
+                              context.read<ThemeCubit>().calculateTheme(
+                                  Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? ThemeMode.light
+                                      : ThemeMode.dark,
+                                  false);
+                            },
+                            child: Icon(Icons.add)),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              _timer.cancel();
+                              _timer = getTimer();
+                              context.read<ThemeCubit>().calculateTheme(
+                                  Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? ThemeMode.light
+                                      : ThemeMode.dark,
+                                  true);
+                            },
+                            child: Icon(Icons.remove),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      currentValue.toString(),
+                      textScaleFactor: 2,
+                      style: TextStyle(
+                          color: Colors.amber, fontWeight: FontWeight.bold),
+                    ),
+                    Column(
+                      children: [
+                        FloatingActionButton(
+                          onPressed: () => context
+                              .read<ThemeCubit>()
+                              .changeTheme(Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? ThemeMode.dark
+                                  : ThemeMode.light),
+                          child: Icon(Icons.change_circle),
+                        ),
+                        if (currentPrefs != null &&
+                            currentPrefs!.containsKey("count"))
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: FloatingActionButton(
+                              onPressed: () {
+                                currentPrefs!.clear();
+                                setState(() {
+                                  values.clear();
+                                  currentValue = 0;
+                                  _timer.cancel();
+                                  _timer = getTimer();
+                                });
+                              },
+                              child: Icon(Icons.delete),
+                            ),
+                          ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                FloatingActionButton(
-                  onPressed: () => context.read<ThemeCubit>().calculateTheme(
-                      Theme.of(context).brightness == Brightness.light
-                          ? ThemeMode.light
-                          : ThemeMode.dark),
-                  child: Icon(Icons.add),
-                ),
-                FloatingActionButton(
-                  onPressed: () => context.read<ThemeCubit>().changeTheme(
-                      Theme.of(context).brightness == Brightness.light
-                          ? ThemeMode.dark
-                          : ThemeMode.light),
-                  child: Icon(Icons.theater_comedy),
-                )
-              ],
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
