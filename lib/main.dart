@@ -32,9 +32,6 @@ class _MyAppState extends State<MyApp> {
       ),
       title: 'Material App',
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Material App Bar'),
-        ),
         body: BlocProvider(
           create: (context) => ThemeCubit(),
           child: BodyWidget(
@@ -65,18 +62,17 @@ class _BodyWidgetState extends State<BodyWidget> {
   @override
   void initState() {
     SharedPreferences.getInstance().then((value) {
-      currentPrefs = value;
-      if (currentPrefs!.containsKey("count")) {
+      if (value.containsKey('theme')) {
+        context
+            .read<ThemeCubit>()
+            .changeTheme(ThemeMode.values[value.getInt('theme')!]);
+      }
+      if (value.containsKey("count")) {
         setState(() {
           currentPrefs = value;
           values = value.getStringList("count")!;
           currentValue = value.getInt("value")!;
         });
-      }
-      if (currentPrefs!.containsKey('theme')) {
-        context
-            .read<ThemeCubit>()
-            .changeTheme(ThemeMode.values[value.getInt('theme')!]);
       }
     });
     _timer = Timer.periodic(Duration(seconds: 5), (timer) {
@@ -118,9 +114,14 @@ class _BodyWidgetState extends State<BodyWidget> {
       child: Stack(
         children: [
           Expanded(
-            child: ListView(
-              clipBehavior: Clip.none,
-              children: values.map((e) => Center(child: Text(e))).toList(),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.2),
+              child: ListView(
+                clipBehavior: Clip.none,
+                children:
+                    values.reversed.map((e) => Center(child: Text(e))).toList(),
+              ),
             ),
           ),
           SizedBox(
@@ -131,8 +132,9 @@ class _BodyWidgetState extends State<BodyWidget> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Column(
+                    Row(
                       children: [
                         FloatingActionButton(
                             onPressed: () {
@@ -147,7 +149,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                             },
                             child: Icon(Icons.add)),
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: const EdgeInsets.only(left: 8.0),
                           child: FloatingActionButton(
                             onPressed: () {
                               _timer.cancel();
@@ -170,7 +172,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                       style: TextStyle(
                           color: Colors.amber, fontWeight: FontWeight.bold),
                     ),
-                    Column(
+                    Row(
                       children: [
                         FloatingActionButton(
                           onPressed: () => context
@@ -184,7 +186,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                         if (currentPrefs != null &&
                             currentPrefs!.containsKey("count"))
                           Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: FloatingActionButton(
                               onPressed: () {
                                 currentPrefs!.clear();
