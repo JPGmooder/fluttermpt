@@ -19,7 +19,6 @@ class ThemeCubit extends Cubit<ThemeCubitState> {
       currentValue = currentValue * -1;
     }
     emit(ThemeValueAddedState(
-        currentTheme: themeMode,
         currentValue: currentValue));
   }
 }

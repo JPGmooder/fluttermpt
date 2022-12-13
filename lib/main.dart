@@ -101,7 +101,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           setState(() {
             currentValue += state.currentValue;
             values.add(
-                "Значение: $currentValue, Тема: ${state.currentTheme.name}");
+                "Значение: $currentValue, Тема: ${Theme.of(context).brightness.name}");
           });
 
           currentPrefs?.setStringList("count", values);
@@ -116,7 +116,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.2),
+                  top: MediaQuery.of(context).size.height * 0.15),
               child: ListView(
                 clipBehavior: Clip.none,
                 children:

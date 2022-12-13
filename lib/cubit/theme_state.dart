@@ -16,8 +16,7 @@ class ThemeModeChangedState extends ThemeCubitState {
 
 
 class ThemeValueAddedState extends ThemeCubitState {
-  ThemeMode currentTheme;
   int currentValue;
   ThemeValueAddedState(
-      {required this.currentTheme, required this.currentValue});
+      { required this.currentValue});
 }
